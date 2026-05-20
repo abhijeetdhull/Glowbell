@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}City Explorer — Glowbell{% endblock %}
+
+{% block content %}
+  <div class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">City Explorer</p>
+        <h1>Enter a city to discover photos, tourist spots, and weather.</h1>
+        <p class="hero-copy">Search any city and get beautiful city photos, a list of attractions, and the 5-day forecast.</p>
+      </div>
+    </header>
+
+    <section class="search-card">
+      <form id="city-form" autocomplete="off" novalidate>
+        <label for="city-input">Enter city</label>
+        <div class="input-row">
+          <input
+            id="city-input"
+            name="city"
+            type="text"
+            placeholder="e.g. Paris"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            required
+          />
+          <button type="submit">Search</button>
+        </div>
+      </form>
+    </section>
+
+    <div id="error-message" class="message hidden"></div>
+
+    <section id="results" class="results hidden">
+      <section class="card weather-card">
+        <h2>Weather forecast</h2>
+        <div id="weather-content" class="card-grid"></div>
+      </section>
+
+      <section class="card photos-card">
+        <h2>Famous city photos</h2>
+        <div id="photos-content" class="photo-grid"></div>
+      </section>
+
+      <section class="card spots-card">
+        <h2>Tourist spots</h2>
+        <ul id="spots-content" class="spot-list"></ul>
+      </section>
+    </section>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

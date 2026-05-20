@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Glowbell{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+</head>
+<body>
+  <nav class="page-nav">
+    <div class="nav-brand">Glowbell</div>
+    {% if logged_in %}
+      <div class="nav-actions">
+        <span class="nav-user">Hello, {{ username }}</span>
+        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    {% endif %}
+  </nav>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <section class="flash-messages">
+        {% for category, message in messages %}
+          <div class="flash-item flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </section>
+    {% endif %}
+  {% endwith %}
+
+  <main>{% block content %}{% endblock %}</main>
+</body>
+</html>
