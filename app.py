@@ -56,6 +56,13 @@ def login_post():
     return redirect(url_for("login"))
 
 
+@app.route("/skip")
+def skip_login():
+    session["username"] = "guest"
+    flash("You are browsing as a guest.", "info")
+    return redirect(url_for("explore"))
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":

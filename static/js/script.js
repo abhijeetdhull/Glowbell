@@ -4,7 +4,6 @@ const errorMessage = document.getElementById('error-message');
 const resultsSection = document.getElementById('results');
 const weatherContent = document.getElementById('weather-content');
 const photosContent = document.getElementById('photos-content');
-const spotsContent = document.getElementById('spots-content');
 
 const weatherCodeEmoji = {
   0: '☀️',
@@ -50,15 +49,13 @@ async function searchCity(city) {
 
   try {
     const location = await getLocation(city);
-    const [weather, photos, spots] = await Promise.all([
+    const [weather, photos] = await Promise.all([
       getWeather(location),
-      getCityPhotos(city),
-      getTouristSpots(city)
+      getCityPhotos(city)
     ]);
 
     renderWeather(location.displayName, weather);
     renderPhotos(photos);
-    renderSpots(spots);
     resultsSection.classList.remove('hidden');
   } catch (error) {
     setError(error.message || 'Unable to load city data. Please try another city.');
@@ -72,7 +69,6 @@ function showLoading(isLoading) {
   if (isLoading) {
     weatherContent.innerHTML = '<p>Loading weather…</p>';
     photosContent.innerHTML = '<p>Loading photos…</p>';
-    spotsContent.innerHTML = '<p>Loading tourist spots…</p>';
     errorMessage.classList.add('hidden');
     resultsSection.classList.remove('hidden');
   }
@@ -128,20 +124,6 @@ async function getCityPhotos(city) {
     .slice(0, 6);
 }
 
-async function getTouristSpots(city) {
-  const query = `${city} tourist attractions`;
-  const url = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=6&srprop=snippet&format=json&origin=*`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error('Tourist spot service is unavailable.');
-  const data = await response.json();
-
-  return data.query?.search?.map((item) => ({
-    title: item.title,
-    snippet: item.snippet.replace(/<[^>]+>/g, ''),
-    link: `https://en.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, '_'))}`
-  })) || [];
-}
-
 function renderWeather(displayName, daily) {
   weatherContent.innerHTML = '';
 
@@ -181,24 +163,6 @@ function renderPhotos(photos) {
       <p>${photo.title}</p>
     `;
     photosContent.appendChild(card);
-  });
-}
-
-function renderSpots(spots) {
-  spotsContent.innerHTML = '';
-  if (!spots.length) {
-    spotsContent.innerHTML = '<li class="spot-item">No tourist spots found.</li>';
-    return;
-  }
-
-  spots.forEach((spot) => {
-    const item = document.createElement('li');
-    item.className = 'spot-item';
-    item.innerHTML = `
-      <h3><a href="${spot.link}" target="_blank" rel="noopener noreferrer">${spot.title}</a></h3>
-      <p>${spot.snippet}</p>
-    `;
-    spotsContent.appendChild(item);
   });
 }
 

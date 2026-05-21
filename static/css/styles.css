@@ -166,6 +166,7 @@ button:hover {
 }
 
 .photo-card {
+  position: relative;
   overflow: hidden;
   border-radius: 20px;
   background: #e2e8f0;
@@ -188,7 +189,8 @@ button:hover {
   color: #ffffff;
   position: absolute;
   bottom: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
 }
 
 .spot-list {
